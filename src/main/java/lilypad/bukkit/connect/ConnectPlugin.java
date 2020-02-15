@@ -7,7 +7,6 @@ import lilypad.bukkit.connect.injector.OfflineInjector;
 import lilypad.bukkit.connect.login.LoginListener;
 import lilypad.bukkit.connect.login.LoginNettyInjectHandler;
 import lilypad.bukkit.connect.login.LoginPayloadCache;
-import lilypad.bukkit.connect.protocol.*;
 import lilypad.bukkit.connect.util.ReflectionUtils;
 import lilypad.client.connect.api.Connect;
 import lilypad.client.connect.lib.ConnectImpl;
@@ -27,7 +26,6 @@ public class ConnectPlugin extends JavaPlugin {
 	private ConnectThread connectThread;
 	private String securityKey;
 	private int commonPort;
-	private static IProtocol protocol;
 
 	@Override
 	public void onLoad() {
@@ -38,41 +36,6 @@ public class ConnectPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		String version = super.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
-		switch (version) {
-		case "v1_8_R1":
-			protocol = new Protocol1_8_R1();
-			break;
-		case "v1_8_R2":
-		case "v1_8_R3":
-			protocol = new Protocol1_8_R2();
-			break;
-		case "v1_9_R1":
-			protocol = new Protocol1_9_R1();
-			break;
-		case "v1_9_R2":
-			protocol = new Protocol1_9_R2();
-			break;
-		case "v1_10_R1":
-			protocol = new Protocol1_10_R1();
-			break;
-		case "v1_11_R1":
-			protocol = new Protocol1_11_R1();
-			break;
-		case "v1_12_R1":
-			protocol = new Protocol1_12_R1();
-			break;
-		case "v1_14_R1":
-			protocol = new Protocol1_14_R1();
-			break;
-		case "v1_15_R1":
-			protocol = new Protocol1_15_R1();
-			break;
-		default:
-			System.out.println("[Connect] Unable to start plugin - unsupported version (" + version + "). Please retrieve the newest version at http://lilypadmc.org");
-			return;
-		}
-
 		try {
 			// Modify handshake packet max string size
 			// -- as of 1.8 I do not believe this is necessary anymore
@@ -133,7 +96,6 @@ public class ConnectPlugin extends JavaPlugin {
 		} finally {
 			this.connect = null;
 			this.connectThread = null;
-			ConnectPlugin.protocol = null;
 		}
 	}
 
@@ -163,10 +125,6 @@ public class ConnectPlugin extends JavaPlugin {
 
 	public SpigotHook getSpigotHook() {
 		return this.spigotHook;
-	}
-
-	public static IProtocol getProtocol() {
-		return protocol;
 	}
 
 }

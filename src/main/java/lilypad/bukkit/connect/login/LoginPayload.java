@@ -1,6 +1,7 @@
 package lilypad.bukkit.connect.login;
 
 import com.google.gson.Gson;
+
 import java.util.UUID;
 
 public class LoginPayload {

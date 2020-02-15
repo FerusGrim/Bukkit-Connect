@@ -1,11 +1,9 @@
 package lilypad.bukkit.connect.injector;
 
-import org.bukkit.Bukkit;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Method;
 

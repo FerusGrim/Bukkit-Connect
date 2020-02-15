@@ -1,10 +1,9 @@
 package lilypad.bukkit.connect;
 
-import java.net.InetSocketAddress;
-
+import lilypad.client.connect.api.ConnectSettings;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import lilypad.client.connect.api.ConnectSettings;
+import java.net.InetSocketAddress;
 
 public class ConnectSettingsImpl implements ConnectSettings {
 

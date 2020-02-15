@@ -9,11 +9,11 @@ import lilypad.bukkit.connect.injector.NettyDecoderHandler;
 import lilypad.bukkit.connect.injector.NettyInjectHandler;
 import lilypad.bukkit.connect.injector.OfflineInjector;
 import lilypad.bukkit.connect.util.ReflectionUtils;
+import net.minecraft.server.v1_8_R3.NetworkManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
-import java.util.UUID;
 
 public class LoginNettyInjectHandler implements NettyInjectHandler {
 
@@ -123,19 +123,8 @@ public class LoginNettyInjectHandler implements NettyInjectHandler {
 			// Netty
 			ReflectionUtils.setFinalField(AbstractChannel.class, context.channel(), "remoteAddress", newRemoteAddress);
 			// MC
-			Object networkManager = context.channel().pipeline().get("packet_handler");
-
-			if (ConnectPlugin.getProtocol().getGeneralVersion().equalsIgnoreCase("1.7")) {
-				String[] fields = ConnectPlugin.getProtocol().getLoginNettyInjectHandlerNetworkManager().split(",");
-				try {
-					ReflectionUtils.setFinalField(networkManager.getClass(), networkManager, fields[0], newRemoteAddress);
-				} catch (Exception e) {
-					ReflectionUtils.setFinalField(networkManager.getClass(), networkManager, fields[1], newRemoteAddress);
-				}
-			} else {
-				ReflectionUtils.setFinalField(networkManager.getClass(), networkManager, ConnectPlugin.getProtocol().getLoginNettyInjectHandlerNetworkManager(), newRemoteAddress);
-			}
-
+			NetworkManager networkManager = (NetworkManager) context.channel().pipeline().get("packet_handler");
+			networkManager.l = newRemoteAddress;
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -149,7 +138,7 @@ public class LoginNettyInjectHandler implements NettyInjectHandler {
 		try {
 			Object networkManager = context.channel().pipeline().get("packet_handler");
 			try {
-				Class loginListenerProxyClass = LoginListenerProxy.get(networkManager);
+				Class loginListenerProxyClass = LoginListenerProxy.get();
 				Constructor loginListenerProxyConstructor = loginListenerProxyClass.getConstructors()[0];
 				Object offlineMinecraftServer = OfflineInjector.getOfflineMinecraftServer();
 				Object loginListenerProxy = loginListenerProxyConstructor.newInstance(offlineMinecraftServer, networkManager);

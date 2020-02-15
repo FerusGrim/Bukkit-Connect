@@ -5,34 +5,23 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-
-import java.net.InetSocketAddress;
-import java.lang.reflect.Method;
-import java.util.List;
-
-import lilypad.bukkit.connect.ConnectPlugin;
 import lilypad.bukkit.connect.util.ReflectionUtils;
-
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.ServerConnection;
 import org.bukkit.Server;
+
+import java.lang.reflect.Field;
+import java.net.InetSocketAddress;
+import java.util.List;
 
 public class NettyInjector {
 
 	@SuppressWarnings("unchecked")
 	public static int injectAndFindPort(Server server, NettyInjectHandler handler) throws Exception {
-		Method serverGetHandle = server.getClass().getDeclaredMethod("getServer");
-		Object minecraftServer = serverGetHandle.invoke(server);
-		// Get Server Connection
-		Method serverConnectionMethod = null;
-		for(Method method : minecraftServer.getClass().getSuperclass().getDeclaredMethods()) {
-			if(!method.getReturnType().getSimpleName().equals("ServerConnection")) {
-				continue;
-			}
-			serverConnectionMethod = method;
-			break;
-		}
-		Object serverConnection = serverConnectionMethod.invoke(minecraftServer);
-		// Get ChannelFuture List // TODO find the field dynamically
-		List<ChannelFuture> channelFutureList = ReflectionUtils.getPrivateField(serverConnection.getClass(), serverConnection, List.class, ConnectPlugin.getProtocol().getNettyInjectorChannelFutureList());
+		ServerConnection serverConnection = MinecraftServer.getServer().getServerConnection();
+		Field field = serverConnection.getClass().getDeclaredField("g");
+		field.setAccessible(true);
+		List<ChannelFuture> channelFutureList = (List<ChannelFuture>) field.get(serverConnection);
 		// Iterate ChannelFutures
 		int commonPort = 0;
 		for(ChannelFuture channelFuture : channelFutureList) {

@@ -49,9 +49,10 @@
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.10-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
+      <artifactId>spigot-server</artifactId>
+      <version>1.8.9R0.3-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/libs/spigot.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>com.mojang</groupId>

@@ -1,13 +1,9 @@
 package lilypad.bukkit.connect.injector;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
 public class NettyDecoderHandler extends MessageToMessageDecoder<Object> {
 

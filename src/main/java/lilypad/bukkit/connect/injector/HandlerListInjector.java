@@ -1,16 +1,15 @@
 package lilypad.bukkit.connect.injector;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-
 import lilypad.bukkit.connect.util.ReflectionUtils;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 
 public class HandlerListInjector extends HandlerList {
 

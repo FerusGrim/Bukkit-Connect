@@ -1,43 +1,23 @@
 package lilypad.bukkit.connect.hooks;
 
-import lilypad.bukkit.connect.util.ReflectionUtils;
+import org.spigotmc.SpigotConfig;
 
 public class SpigotHook {
 
-      private boolean isSpigot;
-      private String whitelistMessage;
-      private String serverFullMessage;
-
       public SpigotHook() {
-            Class<?> spigotConfig;
-
-            try {
-                  spigotConfig = Class.forName("org.spigotmc.SpigotConfig");
-                  this.isSpigot = true;
-            } catch(Exception exception) {
-                  this.isSpigot = false;
-                  return;
-            }
-
-            try {
-                  this.whitelistMessage = ReflectionUtils.getPrivateField(spigotConfig, null, String.class, "whitelistMessage");
-                  this.serverFullMessage = ReflectionUtils.getPrivateField(spigotConfig, null, String.class, "serverFullMessage");
-                  ReflectionUtils.setFinalField(spigotConfig, null, "saveUserCacheOnStopOnly", true);
-            } catch(Exception exception) {
-                  exception.printStackTrace();
-            }
+            SpigotConfig.saveUserCacheOnStopOnly = true;
       }
 
       public boolean isSpigot() {
-            return this.isSpigot;
+            return true;
       }
 
       public String getWhitelistMessage() {
-            return this.whitelistMessage;
+            return SpigotConfig.whitelistMessage;
       }
 
       public String getServerFullMessage() {
-            return this.serverFullMessage;
+            return SpigotConfig.serverFullMessage;
       }
 
 }
